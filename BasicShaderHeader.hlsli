@@ -1,7 +1,8 @@
 struct Input {
   float4 pos : POSITION;
   float2 uv : TEXCOORD;
-  //uint inst : SV_InstanceID;
+  float4x4 mat : MATRIX;
+  uint id : SV_InstanceID;
 };
 
 struct Output {

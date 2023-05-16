@@ -1,7 +1,7 @@
 #include "DxGraphic.h"
 
 namespace mugen_engine {
-Graphic::Graphic() : _texData(0), _width(32), _height(32) {}
+Graphic::Graphic() : _width(32), _height(32) {}
 void Graphic::Load() {
   D3D12_HEAP_PROPERTIES heapprop = {};
   heapprop.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -10,7 +10,7 @@ void Graphic::Load() {
 
   D3D12_RESOURCE_DESC resdesc = {};
   resdesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-  resdesc.Width = sizeof(_reserve_list[0]) * maxInstance;
+  resdesc.Width = sizeof(Vertex) * 4;
   resdesc.Height = 1;
   resdesc.DepthOrArraySize = 1;
   resdesc.MipLevels = 1;
@@ -24,13 +24,12 @@ void Graphic::Load() {
       D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
       IID_PPV_ARGS(_vertBuff.GetAddressOf()));
 
-  _texData.resize(256 * 256);
-  for (auto& rgba : _texData) {
-    rgba.R = rand() % 256;
-    rgba.G = rand() % 256;
-    rgba.B = rand() % 256;
-    rgba.A = 255;
-  }
+  resdesc.Width = sizeof(DirectX::XMMATRIX) * maxInstance;
+  getIns()
+      .getDevice()->CreateCommittedResource(
+      &heapprop, D3D12_HEAP_FLAG_NONE, &resdesc,
+      D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+      IID_PPV_ARGS(_constBuff.GetAddressOf()));
 
   DirectX::TexMetadata mt = {};
   DirectX::ScratchImage scImg = {};
@@ -55,7 +54,7 @@ void Graphic::Load() {
       D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, nullptr,
       IID_PPV_ARGS(_texBuff.GetAddressOf()));
 
-  _texBuff->WriteToSubresource(0, nullptr, scImg.GetImages()->pixels,
+  res = _texBuff->WriteToSubresource(0, nullptr, scImg.GetImages()->pixels,
                                scImg.GetImages()->rowPitch, scImg.GetImages()->slicePitch);
 
   _gpipelineState = getIns().CreateGraphicPipelineState();
@@ -63,6 +62,7 @@ void Graphic::Load() {
   initShaderResourceView();
 }
 void Graphic::Draw(float x, float y, float a, float ex) {
+  if (_reserve_list.size() >= maxInstance) return;
   DirectX::XMVECTOR base[4] = {{-_width, _height, 0.0f, 1.0f},
                                {-_width, -_height, 0.0f, 1.0f},
                                {_width, _height, 0.0f, 1.0f},
@@ -79,33 +79,43 @@ void Graphic::Draw(float x, float y, float a, float ex) {
   trs.r[3].m128_f32[1] = -((y / getIns()._height) - 1.0f);
   DirectX::XMMATRIX rot = DirectX::XMMatrixRotationZ(a);
   DirectX::XMMATRIX mod = scl * rot * trs;
-  for (int i = 0; i < 4; i++) {
-    if (_reserve_list.size() >= maxInstance * 4) break;
-    base[i] = DirectX::XMVector4Transform(base[i], mod);
-    input[i].pos.x = base[i].m128_f32[0];
-    input[i].pos.y = base[i].m128_f32[1];
-    input[i].pos.z = base[i].m128_f32[2];
-    _reserve_list.push_back(input[i]);
-  }
+    //base[i] = DirectX::XMVector4Transform(base[i], mod);
+    //input[i].pos.x = base[i].m128_f32[0];
+    //input[i].pos.y = base[i].m128_f32[1];
+    //input[i].pos.z = base[i].m128_f32[2];
+  _reserve_list.push_back(mod);
 }
 void Graphic::Render() {
   if (_reserve_list.empty()) return;
+  Vertex base[4] = {{{(float)-_width, (float)_height, 0.0f}, {0.0f, 1.0f}},
+                    {{(float)-_width, (float)-_height, 0.0f}, {0.0f, 0.0f}},
+                    {{(float)_width, (float)_height, 0.0f}, {1.0f, 1.0f}},
+                    {{(float)_width, (float)-_height, 0.0f}, {1.0f, 0.0f}}};
+
   Vertex* vertMap = nullptr;
   _vertBuff->Map(0, nullptr, (void**)&vertMap);
-  std::copy(std::begin(_reserve_list), std::end(_reserve_list), vertMap);
+  std::copy(std::begin(base), std::end(base), vertMap);
   _vertBuff->Unmap(0, nullptr);
 
-  D3D12_VERTEX_BUFFER_VIEW vbView = {};
-  vbView.BufferLocation = _vertBuff->GetGPUVirtualAddress();
-  vbView.SizeInBytes = (sizeof(_reserve_list[0]) * _reserve_list.size());
-  vbView.StrideInBytes = sizeof(_reserve_list[0]);
+  DirectX::XMMATRIX* constMap = nullptr;
+  _constBuff->Map(0, nullptr, (void**)&constMap);
+  std::copy(std::begin(_reserve_list), std::end(_reserve_list), constMap);
+  _constBuff->Unmap(0, nullptr);
+
+  D3D12_VERTEX_BUFFER_VIEW vbView[2] = {};
+  vbView[0].BufferLocation = _vertBuff->GetGPUVirtualAddress();
+  vbView[0].SizeInBytes = (sizeof(base[0]) * _countof(base));
+  vbView[0].StrideInBytes = sizeof(base[0]);
+  vbView[1].BufferLocation = _constBuff->GetGPUVirtualAddress();
+  vbView[1].SizeInBytes = sizeof(_reserve_list[0]) * _reserve_list.size();
+  vbView[1].StrideInBytes = sizeof(_reserve_list[0]);
 
   getIns().SetRootDescriptorTable(srvIndex);
   getIns().getCommandList()->SetPipelineState(_gpipelineState.Get());
   getIns().getCommandList()->IASetPrimitiveTopology(
       D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-  getIns().getCommandList()->IASetVertexBuffers(0, 1, &vbView);
-  getIns().getCommandList()->DrawInstanced(_reserve_list.size(), 1, 0, 0);
+  getIns().getCommandList()->IASetVertexBuffers(0, 2, vbView);
+  getIns().getCommandList()->DrawInstanced(4, _reserve_list.size(), 0, 0);
 }
 void Graphic::initShaderResourceView() {
   D3D12_SHADER_RESOURCE_VIEW_DESC srvD = {};

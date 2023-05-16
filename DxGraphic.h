@@ -21,9 +21,9 @@ class Graphic {
   int _width;
   int _height;
   const UINT maxInstance = 16384;
-  std::vector<Vertex> _reserve_list;
-  std::vector<TexRGBA> _texData;
+  std::vector<DirectX::XMMATRIX> _reserve_list;
   ComPtr<ID3D12Resource> _vertBuff = nullptr;
+  ComPtr<ID3D12Resource> _constBuff = nullptr;
   ComPtr<ID3D12Resource> _texBuff = nullptr;
   ComPtr<ID3D12PipelineState> _gpipelineState = nullptr;
   UINT srvIndex = 0;

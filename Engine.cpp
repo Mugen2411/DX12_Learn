@@ -180,7 +180,6 @@ void Engine::loadShader() {
 }
 ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState() {
   D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline = {};
-  ComPtr<ID3D12PipelineState> ret;
   gpipeline.pRootSignature = _rootsignature.Get();
   gpipeline.VS.pShaderBytecode = _vsBlob->GetBufferPointer();
   gpipeline.VS.BytecodeLength = _vsBlob->GetBufferSize();
@@ -213,7 +212,8 @@ ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState() {
   gpipeline.SampleDesc.Count = 1;
   gpipeline.SampleDesc.Quality = 0;
 
-  _dev->CreateGraphicsPipelineState(
+  ComPtr<ID3D12PipelineState> ret = nullptr;
+  auto res = _dev->CreateGraphicsPipelineState(
       &gpipeline, IID_PPV_ARGS(ret.GetAddressOf()));
   return ret;
 }
@@ -224,21 +224,12 @@ void Engine::initRootSignature() {
   descTblRange[0].BaseShaderRegister = 0;
   descTblRange[0].OffsetInDescriptorsFromTableStart =
       D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-  descTblRange[1].NumDescriptors = 1;
-  descTblRange[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-  descTblRange[1].BaseShaderRegister = 0;
-  descTblRange[1].OffsetInDescriptorsFromTableStart =
-      D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
   D3D12_ROOT_PARAMETER rootParam[2] = {};
   rootParam[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
   rootParam[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
   rootParam[0].DescriptorTable.pDescriptorRanges = &descTblRange[0];
   rootParam[0].DescriptorTable.NumDescriptorRanges = 1;
-  rootParam[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-  rootParam[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-  rootParam[1].DescriptorTable.pDescriptorRanges = &descTblRange[1];
-  rootParam[1].DescriptorTable.NumDescriptorRanges = 1;
 
   D3D12_STATIC_SAMPLER_DESC smpD = {};
   smpD.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -254,7 +245,7 @@ void Engine::initRootSignature() {
   D3D12_ROOT_SIGNATURE_DESC rsD = {};
   rsD.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
   rsD.pParameters = rootParam;
-  rsD.NumParameters = 2;
+  rsD.NumParameters = 1;
   rsD.pStaticSamplers = &smpD;
   rsD.NumStaticSamplers = 1;
 

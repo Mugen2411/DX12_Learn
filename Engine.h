@@ -10,16 +10,15 @@
 #include <wrl/client.h>
 
 #include <algorithm>
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <memory>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "DirectXTex.lib")
-
 
 namespace mugen_engine {
 using Microsoft::WRL::ComPtr;
@@ -29,14 +28,14 @@ class Engine {
  public:
   Engine();
   ~Engine();
-  void Initialize(int width, int height,HWND hWnd);
+  void Initialize(int width, int height, HWND hWnd);
   void ScreenFlip();
   void Process();
   ComPtr<ID3D12PipelineState> CreateGraphicPipelineState();
   ID3D12Device* getDevice() { return _dev.Get(); }
   ID3D12GraphicsCommandList* getCommandList() { return _cmdList.Get(); }
   UINT createSRV(ComPtr<ID3D12Resource> textureBuffer,
-                D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc) {
+                 D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc) {
     _diff = _dev->GetDescriptorHandleIncrementSize(
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     _start = _descHeap->GetCPUDescriptorHandleForHeapStart();
@@ -60,8 +59,7 @@ class Engine {
         D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     auto start = _descHeap->GetGPUDescriptorHandleForHeapStart();
     start.ptr += diff * index;
-    _cmdList->SetGraphicsRootDescriptorTable(
-        0, start);
+    _cmdList->SetGraphicsRootDescriptorTable(0, start);
   }
   std::shared_ptr<Graphic> LoadGraphic(std::string gid);
 
@@ -97,12 +95,20 @@ class Engine {
                                  D3D_FEATURE_LEVEL_11_1,
                                  D3D_FEATURE_LEVEL_11_0};
 
-  D3D12_INPUT_ELEMENT_DESC _inputLayout[2] = {
+  D3D12_INPUT_ELEMENT_DESC _inputLayout[6] = {
       {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
        D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
        0},
       {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT,
-       D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}};
+       D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+      {"MATRIX", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
+      {"MATRIX", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
+      {"MATRIX", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
+      {"MATRIX", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}};
 
   std::unordered_map<std::string, std::shared_ptr<Graphic>> _loaded_graphics;
 
