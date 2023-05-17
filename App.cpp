@@ -24,7 +24,8 @@ App::App(int width, int height, LPCWSTR windowTitle)
   AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
   _hwnd = CreateWindow(windowClass.lpszClassName, _windowTitle,
-                       WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                       WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX,
+                       CW_USEDEFAULT, CW_USEDEFAULT,
                        wrc.right - wrc.left, wrc.bottom - wrc.top, nullptr,
                        nullptr, windowClass.hInstance, nullptr);
 
@@ -38,10 +39,10 @@ App::~App() {
 }
 
 void App::Initialize() {
-  mugen_engine::getIns().Initialize(_window_width, _window_height, _hwnd);
-  mugen_engine::getIns().LoadGraphic("1");
-  mugen_engine::getIns().LoadGraphic("2");
-  _graph = mugen_engine::getIns().LoadGraphic("3");
+  mugen_engine::getIns().Initialize(640, 480, _hwnd);
+  //mugen_engine::getIns().LoadGraphic("1", _T("M.png"));
+  _graph = mugen_engine::getIns().LoadGraphic(
+      "B_small", _T("media/bullet/small.png"), 16, 16, 8, 8, 4);
 }
 
 bool App::Process() {
@@ -58,8 +59,8 @@ bool App::Process() {
 }
 
 void App::Update() {
-  for (int i = 0; i < 32; i++) {
-    _graph->Draw(i * 32, i * 32, 3.14 / 32 * i, i / 8.0f);
-  }
+  _graph->Draw(256, 32, 0.1f, 1.0f, 9);
+  _graph->Draw(128, 96, 0.4f, 1.0f, 19);
+  _graph->Draw(480, 108, 0.8f, 1.0f, 29);
   mugen_engine::getIns().ScreenFlip();
 }

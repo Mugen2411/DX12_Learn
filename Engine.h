@@ -31,7 +31,7 @@ class Engine {
   void Initialize(int width, int height, HWND hWnd);
   void ScreenFlip();
   void Process();
-  ComPtr<ID3D12PipelineState> CreateGraphicPipelineState();
+  ComPtr<ID3D12PipelineState> CreateGraphicPipelineState(D3D12_BLEND_DESC blD);
   ID3D12Device* getDevice() { return _dev.Get(); }
   ID3D12GraphicsCommandList* getCommandList() { return _cmdList.Get(); }
   UINT createSRV(ComPtr<ID3D12Resource> textureBuffer,
@@ -61,6 +61,7 @@ class Engine {
     start.ptr += diff * index;
     _cmdList->SetGraphicsRootDescriptorTable(0, start);
   }
+  std::shared_ptr<Graphic> LoadGraphic(std::string gid, std::wstring filepath, int width, int height, int divnum, int xnum, int ynum);
   std::shared_ptr<Graphic> LoadGraphic(std::string gid);
 
   int _width;
@@ -95,7 +96,7 @@ class Engine {
                                  D3D_FEATURE_LEVEL_11_1,
                                  D3D_FEATURE_LEVEL_11_0};
 
-  D3D12_INPUT_ELEMENT_DESC _inputLayout[6] = {
+  D3D12_INPUT_ELEMENT_DESC _inputLayout[8] = {
       {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
        D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,
        0},
@@ -108,6 +109,12 @@ class Engine {
       {"MATRIX", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32,
        D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
       {"MATRIX", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
+      {"BLENDLEVEL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,
+       D3D12_APPEND_ALIGNED_ELEMENT,
+       D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
+      {"DIVUV", 0, DXGI_FORMAT_R32G32_FLOAT, 1,
+       D3D12_APPEND_ALIGNED_ELEMENT,
        D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}};
 
   std::unordered_map<std::string, std::shared_ptr<Graphic>> _loaded_graphics;

@@ -79,7 +79,7 @@ void Engine::Process() {
   rtvH.ptr += _currentBackBufferIdx * _dev->GetDescriptorHandleIncrementSize(
                                           D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
   _cmdList->OMSetRenderTargets(1, &rtvH, true, nullptr);
-  float clearColor[] = {0.0, 1.0, 0.7, 1.0};
+  float clearColor[] = {0.2, 0.2, 0.2, 1.0};
   _cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
   _cmdList->RSSetViewports(1, &_viewport);
   _cmdList->RSSetScissorRects(1, &_scissorrect);
@@ -99,7 +99,12 @@ void Engine::initDevice() {
   if (_dev == nullptr) {
     abort();
   }
+  #ifdef _DEBUG
+  auto flagsDXGI = DXGI_CREATE_FACTORY_DEBUG;
+  CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(&_dxgiFactory));
+  #else
   CreateDXGIFactory1(IID_PPV_ARGS(&_dxgiFactory));
+  #endif
 }
 void Engine::initCommandList() {
   _dev->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
@@ -118,23 +123,21 @@ void Engine::initCommandList() {
 }
 
 void Engine::initSwapChain(int width, int height, HWND hwnd) {
-  DXGI_SWAP_CHAIN_DESC1 scDesc = {};
-  scDesc.Width = width;
-  scDesc.Height = height;
-  scDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-  scDesc.Stereo = false;
+  DXGI_SWAP_CHAIN_DESC scDesc = {};
+  scDesc.BufferDesc.Width = width;
+  scDesc.BufferDesc.Height = height;
+  scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   scDesc.SampleDesc.Count = 1;
   scDesc.SampleDesc.Quality = 0;
   scDesc.BufferUsage = DXGI_USAGE_BACK_BUFFER;
   scDesc.BufferCount = 2;
-  scDesc.Scaling = DXGI_SCALING_STRETCH;
   scDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-  scDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
   scDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+  scDesc.OutputWindow = hwnd;
+  scDesc.Windowed = true;
 
-  _dxgiFactory->CreateSwapChainForHwnd(
-      _cmdQueue.Get(), hwnd, &scDesc, nullptr, nullptr,
-      (IDXGISwapChain1**)_swapchain.GetAddressOf());
+  auto res = _dxgiFactory->CreateSwapChain(
+      _cmdQueue.Get(), &scDesc, (IDXGISwapChain**)_swapchain.GetAddressOf());
 }
 void Engine::initRenderTargetView() {
   D3D12_DESCRIPTOR_HEAP_DESC dhDesc = {};
@@ -178,7 +181,7 @@ void Engine::loadShader() {
                      D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
                      _psBlob.GetAddressOf(), _errorBlob.GetAddressOf());
 }
-ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState() {
+ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState(D3D12_BLEND_DESC blD) {
   D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline = {};
   gpipeline.pRootSignature = _rootsignature.Get();
   gpipeline.VS.pShaderBytecode = _vsBlob->GetBufferPointer();
@@ -192,14 +195,7 @@ ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState() {
   gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
   gpipeline.RasterizerState.DepthClipEnable = true;
 
-  gpipeline.BlendState.AlphaToCoverageEnable = false;
-  gpipeline.BlendState.IndependentBlendEnable = false;
-
-  D3D12_RENDER_TARGET_BLEND_DESC rtbD = {};
-  rtbD.BlendEnable = false;
-  rtbD.LogicOpEnable = false;
-  rtbD.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-  gpipeline.BlendState.RenderTarget[0] = rtbD;
+  gpipeline.BlendState = blD;
 
   gpipeline.InputLayout.pInputElementDescs = _inputLayout;
   gpipeline.InputLayout.NumElements = _countof(_inputLayout);
@@ -236,7 +232,7 @@ void Engine::initRootSignature() {
   smpD.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
   smpD.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
   smpD.BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK;
-  smpD.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+  smpD.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
   smpD.MaxLOD = D3D12_FLOAT32_MAX;
   smpD.MinLOD = 0.0f;
   smpD.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -281,11 +277,20 @@ void Engine::initDescriptorHeap() {
       &dhDesc, IID_PPV_ARGS(_descHeap.GetAddressOf()));
 }
 
-std::shared_ptr<Graphic> Engine::LoadGraphic(std::string gid) {
+std::shared_ptr<Graphic> Engine::LoadGraphic(std::string gid,
+                                             std::wstring filepath, int width,
+                                             int height, int divnum, int xnum,
+                                             int ynum) {
   auto itr = _loaded_graphics[gid];
-  if (!itr) _loaded_graphics[gid] = std::make_shared<Graphic>();
+  if (!itr) _loaded_graphics[gid] = std::make_shared<Graphic>(filepath, width, height, divnum, xnum, ynum);
   itr = _loaded_graphics[gid];
   itr->Load();
+  return itr;
+}
+
+std::shared_ptr<Graphic> Engine::LoadGraphic(std::string gid) {
+  auto itr = _loaded_graphics[gid];
+  if (!itr) abort();
   return itr;
 }
 
