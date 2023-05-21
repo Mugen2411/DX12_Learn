@@ -19,6 +19,18 @@
     <Filter Include="ソース ファイル\DxEngine">
       <UniqueIdentifier>{fd610061-c93d-473d-a432-19ba1e639304}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Mover">
+      <UniqueIdentifier>{ecdc26da-d3bc-4d52-a869-d1f344dfe443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mover">
+      <UniqueIdentifier>{b06308b8-f165-486d-b63f-ec3515e89e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mover\Bullet">
+      <UniqueIdentifier>{53a71ac0-f1e1-45a1-8205-7cfb1d02ffa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Mover\Bullet">
+      <UniqueIdentifier>{724fc51d-37be-452a-a4a2-2949e17ba7c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -31,7 +43,25 @@
       <Filter>ソース ファイル\DxEngine</Filter>
     </ClCompile>
     <ClCompile Include="DxGraphic.cpp">
+      <Filter>ソース ファイル\DxEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Composit.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Constant.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBase.cpp">
+      <Filter>ソース ファイル\Mover\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MoverManager.cpp">
+      <Filter>ソース ファイル\Mover</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletReflect.cpp">
+      <Filter>ソース ファイル\Mover\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +87,33 @@
     </ClInclude>
     <ClInclude Include="DxGraphic.h">
       <Filter>ヘッダー ファイル\DxEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Composit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletBase.h">
+      <Filter>ヘッダー ファイル\Mover\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Constant.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Fps.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MoverManager.h">
+      <Filter>ヘッダー ファイル\Mover</Filter>
+    </ClInclude>
+    <ClInclude Include="Mover.h">
+      <Filter>ヘッダー ファイル\Mover</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletReflect.h">
+      <Filter>ヘッダー ファイル\Mover\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

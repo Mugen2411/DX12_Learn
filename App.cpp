@@ -39,10 +39,10 @@ App::~App() {
 }
 
 void App::Initialize() {
-  mugen_engine::getIns().Initialize(640, 480, _hwnd);
+  mugen_engine::getIns().Initialize(1280, 960, _hwnd);
   //mugen_engine::getIns().LoadGraphic("1", _T("M.png"));
-  _graph = mugen_engine::getIns().LoadGraphic(
-      "B_small", _T("media/bullet/small.png"), 16, 16, 8, 8, 4);
+  mugen_engine::getIns().LoadGraphic(
+      "B_small", _T("media/bullet/small.png"), 32, 32, 32, 8, 4);
 }
 
 bool App::Process() {
@@ -59,8 +59,9 @@ bool App::Process() {
 }
 
 void App::Update() {
-  _graph->Draw(256, 32, 0.1f, 1.0f, 9);
-  _graph->Draw(128, 96, 0.4f, 1.0f, 19);
-  _graph->Draw(480, 108, 0.8f, 1.0f, 29);
+  _stage.Update();
+  _stage.Render();
   mugen_engine::getIns().ScreenFlip();
+  _fps.Update();
+  _fps.Wait();
 }

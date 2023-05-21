@@ -61,6 +61,7 @@ class Engine {
     start.ptr += diff * index;
     _cmdList->SetGraphicsRootDescriptorTable(0, start);
   }
+  void Execute();
   std::shared_ptr<Graphic> LoadGraphic(std::string gid, std::wstring filepath, int width, int height, int divnum, int xnum, int ynum);
   std::shared_ptr<Graphic> LoadGraphic(std::string gid);
 

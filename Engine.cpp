@@ -277,6 +277,8 @@ void Engine::initDescriptorHeap() {
       &dhDesc, IID_PPV_ARGS(_descHeap.GetAddressOf()));
 }
 
+void Engine::Execute() {}
+
 std::shared_ptr<Graphic> Engine::LoadGraphic(std::string gid,
                                              std::wstring filepath, int width,
                                              int height, int divnum, int xnum,

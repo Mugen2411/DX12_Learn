@@ -144,9 +144,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BulletBase.cpp" />
+    <ClCompile Include="BulletReflect.cpp" />
+    <ClCompile Include="MoverManager.cpp" />
+    <ClCompile Include="Composit.cpp" />
+    <ClCompile Include="Constant.cpp" />
     <ClCompile Include="DxGraphic.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPixelShader.hlsl">
@@ -177,8 +183,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="BulletBase.h" />
+    <ClInclude Include="BulletReflect.h" />
+    <ClInclude Include="MoverManager.h" />
+    <ClInclude Include="Composit.h" />
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="DxGraphic.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Fps.h" />
+    <ClInclude Include="Mover.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

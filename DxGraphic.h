@@ -37,7 +37,7 @@ class Graphic {
   int _width;
   int _height;
   std::wstring _path;
-  const UINT maxInstance = 16384;
+  const UINT maxInstance = 65535;
   std::vector<InputPerInstance> _reserve_list[2];
   ComPtr<ID3D12Resource> _vertBuff = nullptr;
   ComPtr<ID3D12Resource> _constBuff[2] = {nullptr};

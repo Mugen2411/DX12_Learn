@@ -3,6 +3,8 @@
 #include <tchar.h>
 #include "Engine.h"
 #include "DxGraphic.h"
+#include "Stage.h"
+#include "Fps.h"
 
 class App {
  public:
@@ -15,5 +17,6 @@ class App {
   int _window_width, _window_height;
   LPCWSTR _windowTitle;
   HWND _hwnd;
-  std::shared_ptr<mugen_engine::Graphic> _graph;
+  Stage _stage;
+  Fps _fps;
 };
