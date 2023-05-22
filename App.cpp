@@ -44,9 +44,14 @@ void App::Initialize() {
   mugen_engine::getIns().Initialize(1280, 960, _hwnd);
   //mugen_engine::getIns().LoadGraphic("1", _T("M.png"));
   mugen_engine::getIns().LoadGraphic(
-      "B_small", _T("media/graphic/bullet/small.png"), 32, 32, 32, 8, 4);
+      "sys_frame", _T("media/graphic/system/frame.png"), 1280, 960, 1, 1, 1);
+  mugen_engine::getIns().LoadGraphic(
+      "minoki", _T("media/graphic/player/minoki.png"), 32, 32, 1, 1, 1);
+  mugen_engine::getIns().LoadGraphic(
+      "B_small", _T("media/graphic/bullet/small.png"), 32, 32, 40, 8, 5);
   mugen_engine::getIns().LoadGraphic(
       "eff_bulletdelete", _T("media/graphic/system/bullet_delete.png"), 32, 32, 8, 8, 1);
+  _stage.Initialize();
 }
 
 bool App::Process() {
@@ -68,6 +73,7 @@ void App::Update() {
   CEffectParent::Update();
   _stage.Render();
   CEffectParent::Render();
+  CControllerFactory::GetIns().Update();
   mugen_engine::getIns().ScreenFlip();
   _fps.Update();
   _fps.Wait();

@@ -1,4 +1,5 @@
 #include "Engine.h"
+
 #include "DxGraphic.h"
 
 namespace mugen_engine {
@@ -13,7 +14,7 @@ void EnableDebugLayer() {
   debugLayer->Release();
 }
 
-Engine::Engine():currentCbvSrvUavIndex(0){}
+Engine::Engine() : currentCbvSrvUavIndex(0) {}
 
 Engine::~Engine() {}
 
@@ -28,6 +29,7 @@ void Engine::Initialize(int width, int height, HWND hWnd) {
   initCommandList();
   initSwapChain(_width, _height, hWnd);
   initRenderTargetView();
+  initDepthStencilView();
   initFence();
   loadShader();
   initDescriptorHeap();
@@ -79,8 +81,11 @@ void Engine::Process() {
   auto rtvH = _rtvHeaps->GetCPUDescriptorHandleForHeapStart();
   rtvH.ptr += _currentBackBufferIdx * _dev->GetDescriptorHandleIncrementSize(
                                           D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-  _cmdList->OMSetRenderTargets(1, &rtvH, true, nullptr);
+  auto dsvH = _dsvHeap->GetCPUDescriptorHandleForHeapStart();
+  _cmdList->OMSetRenderTargets(1, &rtvH, true, &dsvH);
   float clearColor[] = {0.2, 0.2, 0.2, 1.0};
+  _cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0,
+                                  nullptr);
   _cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
   _cmdList->RSSetViewports(1, &_viewport);
   _cmdList->RSSetScissorRects(1, &_scissorrect);
@@ -100,13 +105,50 @@ void Engine::initDevice() {
   if (_dev == nullptr) {
     abort();
   }
-  #ifdef _DEBUG
+#ifdef _DEBUG
   auto flagsDXGI = DXGI_CREATE_FACTORY_DEBUG;
   CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(&_dxgiFactory));
-  #else
+#else
   CreateDXGIFactory1(IID_PPV_ARGS(&_dxgiFactory));
-  #endif
+#endif
 }
+void Engine::initDepthStencilView() {
+  D3D12_RESOURCE_DESC depthD = {};
+  depthD.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+  depthD.Width = _width;
+  depthD.Height = _height;
+  depthD.DepthOrArraySize = 1;
+  depthD.Format = DXGI_FORMAT_D32_FLOAT;
+  depthD.SampleDesc.Count = 1;
+  depthD.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+  D3D12_HEAP_PROPERTIES depthHP = {};
+  depthHP.Type = D3D12_HEAP_TYPE_DEFAULT;
+  depthHP.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+  depthHP.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+
+  D3D12_CLEAR_VALUE depthCV = {};
+  depthCV.DepthStencil.Depth = 1.0f;
+  depthCV.Format = DXGI_FORMAT_D32_FLOAT;
+
+  _dev->CreateCommittedResource(&depthHP, D3D12_HEAP_FLAG_NONE, &depthD,
+                                D3D12_RESOURCE_STATE_DEPTH_WRITE, &depthCV,
+                                IID_PPV_ARGS(_depthBuffer.GetAddressOf()));
+
+  D3D12_DESCRIPTOR_HEAP_DESC dsvHD = {};
+  dsvHD.NumDescriptors = 1;
+  dsvHD.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+  _dev->CreateDescriptorHeap(&dsvHD, IID_PPV_ARGS(_dsvHeap.GetAddressOf()));
+
+  D3D12_DEPTH_STENCIL_VIEW_DESC dsvD = {};
+  dsvD.Format = DXGI_FORMAT_D32_FLOAT;
+  dsvD.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+  dsvD.Flags = D3D12_DSV_FLAG_NONE;
+
+  _dev->CreateDepthStencilView(_depthBuffer.Get(), &dsvD,
+                               _dsvHeap->GetCPUDescriptorHandleForHeapStart());
+}
+
 void Engine::initCommandList() {
   _dev->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
                                IID_PPV_ARGS(_cmdAllocator.GetAddressOf()));
@@ -182,7 +224,8 @@ void Engine::loadShader() {
                      D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
                      _psBlob.GetAddressOf(), _errorBlob.GetAddressOf());
 }
-ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState(D3D12_BLEND_DESC blD) {
+ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState(
+    D3D12_BLEND_DESC blD) {
   D3D12_GRAPHICS_PIPELINE_STATE_DESC gpipeline = {};
   gpipeline.pRootSignature = _rootsignature.Get();
   gpipeline.VS.pShaderBytecode = _vsBlob->GetBufferPointer();
@@ -208,6 +251,13 @@ ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState(D3D12_BLEND_DESC 
 
   gpipeline.SampleDesc.Count = 1;
   gpipeline.SampleDesc.Quality = 0;
+
+  gpipeline.DepthStencilState.DepthEnable = true;
+  gpipeline.DepthStencilState.StencilEnable = false;
+  gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+  gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+
+  gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
   ComPtr<ID3D12PipelineState> ret = nullptr;
   auto res = _dev->CreateGraphicsPipelineState(
@@ -285,7 +335,9 @@ std::shared_ptr<Graphic> Engine::LoadGraphic(std::string gid,
                                              int height, int divnum, int xnum,
                                              int ynum) {
   auto itr = _loaded_graphics[gid];
-  if (!itr) _loaded_graphics[gid] = std::make_shared<Graphic>(filepath, width, height, divnum, xnum, ynum);
+  if (!itr)
+    _loaded_graphics[gid] =
+        std::make_shared<Graphic>(filepath, width, height, divnum, xnum, ynum);
   itr = _loaded_graphics[gid];
   itr->Load();
   return itr;

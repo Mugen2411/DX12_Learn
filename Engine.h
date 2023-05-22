@@ -81,6 +81,7 @@ class Engine {
   ComPtr<ID3D12CommandQueue> _cmdQueue = nullptr;
   ComPtr<ID3D12RootSignature> _rootsignature = nullptr;
   ComPtr<ID3D12DescriptorHeap> _rtvHeaps = nullptr;
+  ComPtr<ID3D12DescriptorHeap> _dsvHeap = nullptr;
   std::vector<ComPtr<ID3D12Resource>> _backBuffers;
   ComPtr<ID3D12Fence> _fence = nullptr;
   UINT64 _fenceval = 0;
@@ -88,6 +89,7 @@ class Engine {
   D3D12_RECT _scissorrect = {};
   UINT _currentBackBufferIdx;
   ComPtr<ID3D12DescriptorHeap> _descHeap = nullptr;
+  ComPtr<ID3D12Resource> _depthBuffer = nullptr;
   UINT _diff;
   D3D12_CPU_DESCRIPTOR_HANDLE _start;
 
@@ -135,6 +137,7 @@ class Engine {
   void initViewPort(int width, int height);
   void initScissorRect(int width, int height);
   void initDescriptorHeap();
+  void initDepthStencilView();
 };
 
 Engine& getIns();

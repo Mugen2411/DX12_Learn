@@ -93,6 +93,9 @@
     <ClCompile Include="CEffectParent.cpp">
       <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Mover</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicVertexShader.hlsl">
@@ -168,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="CEffectParent.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\Mover</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

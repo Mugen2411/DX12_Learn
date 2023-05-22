@@ -9,13 +9,14 @@ const int kScreenHeight = 960;
 
 const int kGameTopX = 32;
 const int kGameTopY = 32;
-const int kGameBottomX = kScreenWidth * 0.6 - kGameTopX;
-const int kGameBottomY = kScreenHeight - kGameTopY;
+const int kGameBottomX = 768;
+const int kGameBottomY = 928;
 
 static const float kZeroBorder = 0.01f;
 
 namespace Priority {
 const float kEffect = 0.5f;
 const float kBullet = 0.4f;
+const float kPlayer = 0.3f;
 }  // namespace Priorityf
 }  // namespace Constant
