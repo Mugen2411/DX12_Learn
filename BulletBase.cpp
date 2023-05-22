@@ -14,8 +14,8 @@ BulletBase::BulletBase(std::string gid, int gnum, float x, float y, float a,
 BulletBase::State BulletBase::Update() {
   _x += cos(_a) * _sp;
   _y += sin(_a) * _sp;
-  if (_x < 0 || _x > Constant::screen_width || _y < 0 ||
-      _y > Constant::screen_height)
+  if (_x < 0 || _x > Constant::kScreenWidth || _y < 0 ||
+      _y > Constant::kScreenHeight)
     _state = State::kDead;
   return _state;
 }

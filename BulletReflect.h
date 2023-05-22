@@ -7,6 +7,7 @@ class BulletReflect : public BulletBase {
   BulletReflect(std::string gid, int gnum, float x, float y, float a, float sp);
 
  protected:
+  bool _is_reflected;
   virtual State Update();
 };
 }  // namespace bullet

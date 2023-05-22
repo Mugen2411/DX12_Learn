@@ -62,8 +62,12 @@ class Engine {
     _cmdList->SetGraphicsRootDescriptorTable(0, start);
   }
   void Execute();
-  std::shared_ptr<Graphic> LoadGraphic(std::string gid, std::wstring filepath, int width, int height, int divnum, int xnum, int ynum);
+  std::shared_ptr<Graphic> LoadGraphic(std::string gid, std::wstring filepath,
+                                       int width, int height, int divnum,
+                                       int xnum, int ynum);
   std::shared_ptr<Graphic> LoadGraphic(std::string gid);
+
+  HWND getWindowHandle() { return _hwnd; }
 
   int _width;
   int _height;
@@ -88,6 +92,8 @@ class Engine {
   D3D12_CPU_DESCRIPTOR_HANDLE _start;
 
   int currentCbvSrvUavIndex;
+
+  HWND _hwnd;
 
   ComPtr<ID3DBlob> _vsBlob = nullptr;
   ComPtr<ID3DBlob> _psBlob = nullptr;
@@ -114,8 +120,7 @@ class Engine {
       {"BLENDLEVEL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,
        D3D12_APPEND_ALIGNED_ELEMENT,
        D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
-      {"DIVUV", 0, DXGI_FORMAT_R32G32_FLOAT, 1,
-       D3D12_APPEND_ALIGNED_ELEMENT,
+      {"DIVUV", 0, DXGI_FORMAT_R32G32_FLOAT, 1, D3D12_APPEND_ALIGNED_ELEMENT,
        D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}};
 
   std::unordered_map<std::string, std::shared_ptr<Graphic>> _loaded_graphics;
@@ -133,4 +138,5 @@ class Engine {
 };
 
 Engine& getIns();
+
 }  // namespace mugen_engine

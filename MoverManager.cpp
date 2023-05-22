@@ -20,6 +20,12 @@ void Manager::Update() {
         mover::Mover::State::kAlive) {
       _mover_list[_currentIndex].alive = false;
       _dead_index.push(_currentIndex);
+      if (_mover_list[_currentIndex].contents->_state ==
+          mover::Mover::State::kDead)
+        _mover_list[_currentIndex].contents->Dead();
+      if (_mover_list[_currentIndex].contents->_state ==
+          mover::Mover::State::kDisappear)
+        _mover_list[_currentIndex].contents->Disappear();
     }
   }
 }

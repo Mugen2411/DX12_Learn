@@ -23,6 +23,7 @@ void Engine::Initialize(int width, int height, HWND hWnd) {
 #endif
   _width = width;
   _height = height;
+  _hwnd = hWnd;
   initDevice();
   initCommandList();
   initSwapChain(_width, _height, hWnd);

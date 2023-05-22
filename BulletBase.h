@@ -4,6 +4,8 @@
 #include "DxGraphic.h"
 #include "Engine.h"
 #include "Mover.h"
+#include "CEffect_BulletDelete.h"
+#include "CEffectParent.h"
 
 namespace bullet {
 class BulletBase : public mover::Mover {
@@ -19,7 +21,10 @@ class BulletBase : public mover::Mover {
   virtual State Update();
   virtual void Render() const;
 
-  void Dead(){};
+  void Dead() {
+    CEffectParent::RegisterEffect(std::make_shared<CEffect_BulletDelete>(
+        CVector(_x, _y), CVector(_a) * _sp, 32, _gnum%8));
+  };
   void Disappear(){};
 };
 }  // namespace bullet

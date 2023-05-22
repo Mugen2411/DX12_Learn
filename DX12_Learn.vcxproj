@@ -146,6 +146,13 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="BulletBase.cpp" />
     <ClCompile Include="BulletReflect.cpp" />
+    <ClCompile Include="CControllerFactory.cpp" />
+    <ClCompile Include="CEffect.cpp" />
+    <ClCompile Include="CEffectParent.cpp" />
+    <ClCompile Include="CEffect_BulletDelete.cpp" />
+    <ClCompile Include="CKeyInputManager.cpp" />
+    <ClCompile Include="CSTGInputManager.cpp" />
+    <ClCompile Include="CVector.cpp" />
     <ClCompile Include="MoverManager.cpp" />
     <ClCompile Include="Composit.cpp" />
     <ClCompile Include="Constant.cpp" />
@@ -185,6 +192,13 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="BulletBase.h" />
     <ClInclude Include="BulletReflect.h" />
+    <ClInclude Include="CControllerFactory.h" />
+    <ClInclude Include="CEffect.h" />
+    <ClInclude Include="CEffectParent.h" />
+    <ClInclude Include="CEffect_BulletDelete.h" />
+    <ClInclude Include="CKeyInputManager.h" />
+    <ClInclude Include="CSTGInputManager.h" />
+    <ClInclude Include="CVector.h" />
     <ClInclude Include="MoverManager.h" />
     <ClInclude Include="Composit.h" />
     <ClInclude Include="Constant.h" />
@@ -193,6 +207,7 @@
     <ClInclude Include="Fps.h" />
     <ClInclude Include="Mover.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="Stage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

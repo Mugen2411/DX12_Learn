@@ -3,7 +3,10 @@
 namespace mugen_engine {
 Graphic::Graphic(std::wstring filepath, int width, int height, int divnum,
                  int xnum, int ynum)
-    : _width(width), _height(height), _path(filepath), _divInfo{divnum, xnum, ynum} {}
+    : _width(width),
+      _height(height),
+      _path(filepath),
+      _divInfo{divnum, xnum, ynum} {}
 void Graphic::Load() {
   D3D12_HEAP_PROPERTIES heapprop = {};
   heapprop.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -87,8 +90,8 @@ void Graphic::Load() {
 }
 
 // 0:ƒAƒ‹ƒtƒ@ 1:‰ÁŽZ
-void Graphic::Draw(float x, float y, float a, float ex, int divuv, int blendType,
-                   Color c) {
+void Graphic::Draw(float x, float y, float a, float ex, int divuv,
+                   int blendType, Color c) {
   if (_reserve_list[blendType].size() >= maxInstance) return;
   DirectX::XMMATRIX scl = DirectX::XMMatrixScaling(
       2.0f / getIns()._width * ex, -2.0f / getIns()._height * ex, 1.0f);
@@ -169,5 +172,12 @@ void Graphic::initShaderResourceView() {
   srvD.Texture2D.MipLevels = 1;
 
   srvIndex = getIns().createSRV(_texBuff, srvD);
+}
+Graphic::Color GetColorByCode(int code) {
+  int R = code >> 16;
+  int G = (code >> 8) & 0xFF;
+  int B = code & 0xFF;
+  return Graphic::Color{(float)R / 255.0f, (float)G / 255.0f, (float)B / 255.0f,
+                        1.0f};
 }
 }  // namespace mugen_engine

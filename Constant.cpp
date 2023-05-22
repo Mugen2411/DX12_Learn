@@ -1,14 +1,16 @@
 #include "Constant.h"
 
-float Constant::PI = 3.1415926f;
-float Constant::PI2 = PI * 2;
+float Constant::kPI = 3.1415926f;
+float Constant::kPI2 = kPI * 2;
 
-int Constant::screen_width = 1280;
-int Constant::screen_height = 960;
+int Constant::kScreenWidth = 1280;
+int Constant::kScreenHeight = 960;
 
-int Constant::game_top_x = 32;
-int Constant::game_top_y = 32;
+int Constant::kGameTopX = 32;
+int Constant::kGameTopY = 32;
 
-int Constant::game_bottom_x =
-    Constant::screen_width * 0.6 - Constant::game_top_x;
-int Constant::game_bottom_y = Constant::screen_height - Constant::game_top_y;
+int Constant::kGameBottomX =
+    Constant::kScreenWidth * 0.6 - Constant::kGameTopX;
+int Constant::kGameBottomY = Constant::kScreenHeight - Constant::kGameTopY;
+
+float Constant::kZeroBorder = 0.01f;

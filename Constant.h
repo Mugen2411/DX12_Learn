@@ -2,14 +2,16 @@
 
 class Constant {
  public:
-  static float PI;
-  static float PI2;
+  static float kPI;
+  static float kPI2;
 
-  static int screen_width;
-  static int screen_height;
+  static int kScreenWidth;
+  static int kScreenHeight;
 
-  static int game_top_x;
-  static int game_top_y;
-  static int game_bottom_x;
-  static int game_bottom_y;
+  static int kGameTopX;
+  static int kGameTopY;
+  static int kGameBottomX;
+  static int kGameBottomY;
+
+  static float kZeroBorder;
 };

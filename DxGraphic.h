@@ -47,4 +47,15 @@ class Graphic {
 
   void initShaderResourceView();
 };
+const Graphic::Color MainColor[8] = {
+    Graphic::Color{1.0f, 0.0f, 0.0f, 1.0f},
+    Graphic::Color{1.0f, 0.5f, 0.0f, 1.0f},
+    Graphic::Color{1.0f, 1.0f, 0.0f, 1.0f},
+    Graphic::Color{0.0f, 1.0f, 0.0f, 1.0f},
+    Graphic::Color{0.0f, 1.0f, 1.0f, 1.0f},
+    Graphic::Color{1.0f, 0.0f, 1.0f, 1.0f},
+    Graphic::Color{0.7f, 0.0f, 5.0f, 1.0f},
+    Graphic::Color{0.5f, 0.5f, 0.5f, 1.0f}
+};
+Graphic::Color GetColorByCode(int code);
 }  // namespace mugen_engine
