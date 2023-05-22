@@ -11,7 +11,7 @@ class Graphic {
   };
 
   void Load();
-  void Draw(float x, float y, float a, float ex, int divuv = 0, int blendType = 0, Color c = {1.0f,1.0f,1.0f,1.0f});
+  void Draw(float x, float y, float a, float ex, float priority,int divuv = 0, int blendType = 0, Color c = {1.0f,1.0f,1.0f,1.0f});
   void Render();
   void Clear() {
     _reserve_list[0].clear();

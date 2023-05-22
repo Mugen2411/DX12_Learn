@@ -17,7 +17,7 @@ void Stage::Update() {
           "B_small", 8 + col,
           (Constant::kGameBottomX - Constant::kGameTopX) / 2 - 90 + x,
           Constant::kScreenHeight / 4 - 90 + y, a + Constant::kPI2 / 32 * i,
-          2.0f));
+          2.0f), true);
     }
   }
   mover::Manager::getIns().Update();

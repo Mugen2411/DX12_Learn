@@ -19,6 +19,7 @@ void Manager::Update() {
     if (_mover_list[_currentIndex].contents->_state !=
         mover::Mover::State::kAlive) {
       _mover_list[_currentIndex].alive = false;
+      _mover_list[_currentIndex].parent = -1;
       _dead_index.push(_currentIndex);
       if (_mover_list[_currentIndex].contents->_state ==
           mover::Mover::State::kDead)
@@ -28,6 +29,7 @@ void Manager::Update() {
         _mover_list[_currentIndex].contents->Disappear();
     }
   }
+  _currentIndex = -1;
 }
 
 void Manager::Render() const {
@@ -37,7 +39,7 @@ void Manager::Render() const {
   }
 }
 
-Manager::Manager() : kMaxIndex(65536), _mover_list(kMaxIndex) {
+Manager::Manager() : kMaxIndex(65536), _mover_list(kMaxIndex), _currentIndex(-1) {
   for (int i = 0; i < kMaxIndex; i++) {
     _unused_index.push(i);
   }

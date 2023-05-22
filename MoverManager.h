@@ -7,18 +7,20 @@ namespace mover {
 class Mover;
 struct MOVER_ELEM {
   bool alive = false;
+  int parent = -1;
   std::shared_ptr<Mover> contents;
 };
 class Manager {
  public:
   static Manager& getIns() { return _instance; }
   const int kMaxIndex;
-  void addMover(std::shared_ptr<Mover> m) {
+  void addMover(std::shared_ptr<Mover> m, bool isDependOnParent) {
     if (_unused_index.empty()) return;
     int idx = _unused_index.front();
     _unused_index.pop();
     _mover_list[idx].alive = true;
     _mover_list[idx].contents.swap(m);
+    if (isDependOnParent) _mover_list[idx].parent = _currentIndex;
   }
   void Update();
   void Render() const;

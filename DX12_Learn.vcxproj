@@ -155,7 +155,6 @@
     <ClCompile Include="CVector.cpp" />
     <ClCompile Include="MoverManager.cpp" />
     <ClCompile Include="Composit.cpp" />
-    <ClCompile Include="Constant.cpp" />
     <ClCompile Include="DxGraphic.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />

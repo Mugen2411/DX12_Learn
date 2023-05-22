@@ -17,9 +17,10 @@ void CEffect_BulletDelete::Update() {
 }
 
 void CEffect_BulletDelete::Render() const {
-  _graph->Draw(position_.x_, position_.y_, velocity_.GetAngle(), size_ / 32.0,
+  _graph->Draw(position_.x_, position_.y_, velocity_.GetAngle(), size_ / 32.0, Constant::Priority::kEffect,
                (uint32_t)(cnt_ / 2.0), 0, mugen_engine::MainColor[color_]);
   _graph->Draw(position_.x_, position_.y_, velocity_.GetAngle(), size_ / 32.0,
+               Constant::Priority::kEffect,
                (uint32_t)(cnt_ / 2.0), 1,
                mugen_engine::Graphic::Color{1.0f, 1.0f, 1.0f, 1.0f});
 }

@@ -1,17 +1,21 @@
 #pragma once
 
-class Constant {
- public:
-  static float kPI;
-  static float kPI2;
+namespace Constant {
+const float kPI = 3.1415926f;
+const float kPI2 = kPI * 2;
 
-  static int kScreenWidth;
-  static int kScreenHeight;
+const int kScreenWidth = 1280;
+const int kScreenHeight = 960;
 
-  static int kGameTopX;
-  static int kGameTopY;
-  static int kGameBottomX;
-  static int kGameBottomY;
+const int kGameTopX = 32;
+const int kGameTopY = 32;
+const int kGameBottomX = kScreenWidth * 0.6 - kGameTopX;
+const int kGameBottomY = kScreenHeight - kGameTopY;
 
-  static float kZeroBorder;
-};
+static const float kZeroBorder = 0.01f;
+
+namespace Priority {
+const float kEffect = 0.5f;
+const float kBullet = 0.4f;
+}  // namespace Priorityf
+}  // namespace Constant

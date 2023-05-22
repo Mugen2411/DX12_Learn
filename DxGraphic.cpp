@@ -90,14 +90,15 @@ void Graphic::Load() {
 }
 
 // 0:ƒAƒ‹ƒtƒ@ 1:‰ÁŽZ
-void Graphic::Draw(float x, float y, float a, float ex, int divuv,
+void Graphic::Draw(float x, float y, float a, float ex, float priority, int divuv,
                    int blendType, Color c) {
   if (_reserve_list[blendType].size() >= maxInstance) return;
   DirectX::XMMATRIX scl = DirectX::XMMatrixScaling(
       2.0f / getIns()._width * ex, -2.0f / getIns()._height * ex, 1.0f);
   float offx = x / getIns()._width * 2 - 1.0f;
   float offy = y / getIns()._height * 2 - 1.0f;
-  DirectX::XMMATRIX trs = DirectX::XMMatrixTranslation(offx, -offy, 0);
+  float offz = priority;
+  DirectX::XMMATRIX trs = DirectX::XMMatrixTranslation(offx, -offy, priority);
   DirectX::XMMATRIX rot = DirectX::XMMatrixRotationZ(a);
   DirectX::XMMATRIX mod = rot * scl * trs;
   DirectX::XMFLOAT2 div;

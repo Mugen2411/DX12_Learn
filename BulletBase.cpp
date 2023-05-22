@@ -1,4 +1,5 @@
 #include "BulletBase.h"
+
 #include "Constant.h"
 
 namespace bullet {
@@ -19,5 +20,7 @@ BulletBase::State BulletBase::Update() {
     _state = State::kDead;
   return _state;
 }
-void BulletBase::Render() const { _graph->Draw(_x, _y, _a, 1.0f, _gnum, 1); }
+void BulletBase::Render() const {
+  _graph->Draw(_x, _y, _a, 1.0f, Constant::Priority::kBullet, _gnum, 1);
+}
 }  // namespace bullet
