@@ -2,12 +2,19 @@
 #include "BulletBase.h"
 
 namespace bullet {
-class BulletReflect : public BulletBase {
+namespace Descriptor {
+struct REFLECT_DESC : virtual public BASE_DESC {};
+}  // namespace Descriptor
+class BulletReflect : virtual public BulletBase {
  public:
-  BulletReflect(std::string gid, int gnum, float x, float y, float a, float sp);
+  BulletReflect(Type type, Color color, float x, float y, float a, float sp,
+                BlendType blendtype);
 
  protected:
   bool _is_reflected;
   virtual State Update();
+  void Reflect();
 };
+
+std::shared_ptr<BulletBase> Create(Descriptor::REFLECT_DESC desc);
 }  // namespace bullet

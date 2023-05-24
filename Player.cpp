@@ -9,5 +9,6 @@ Mover::State Player::Update() {
 
 void Player::Render() const {
   _graph->Draw(_x, _y, 0.0f, 1.0f, Constant::Priority::kPlayer, 0);
+  _marker->Draw(_x, _y, 0.0f, 1.0f, Constant::Priority::kMarker, 0);
 }
 }  // namespace mover

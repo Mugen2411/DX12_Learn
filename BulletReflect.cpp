@@ -4,13 +4,18 @@
 
 namespace bullet {
 
-BulletReflect::BulletReflect(std::string gid, int gnum, float x, float y,
-                             float a, float sp)
-    : BulletBase(gid, gnum, x, y, a, sp), _is_reflected(false) {}
+BulletReflect::BulletReflect(Type type, Color color, float x, float y,
+                             float a, float sp, BlendType blendtype)
+    : BulletBase(type, color, x, y, a, sp, blendtype), _is_reflected(false) {}
 
 BulletBase::State BulletReflect::Update() {
   _x += cos(_a) * _sp;
   _y += sin(_a) * _sp;
+  Reflect();
+  OutJudge();
+  return _state;
+}
+void BulletReflect::Reflect() {
   if (!_is_reflected) {
     if (_x < Constant::kGameTopX) {
       _x += (Constant::kGameTopX - _x) * 2;
@@ -28,10 +33,9 @@ BulletBase::State BulletReflect::Update() {
       _is_reflected = true;
     }
   }
-
-  if (_x < Constant::kGameTopX || _x > Constant::kGameBottomX || _y < Constant::kGameTopY ||
-      _y > Constant::kGameBottomY)
-    _state = State::kDead;
-  return _state;
+}
+std::shared_ptr<BulletBase> Create(Descriptor::REFLECT_DESC desc) {
+  return std::make_shared<BulletReflect>(desc.type, desc.color,
+      desc.x, desc.y, desc.angle, desc.speed, desc.blendtype);
 }
 }  // namespace bullet

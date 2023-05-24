@@ -12,10 +12,11 @@ class Graphic {
 
   void Load();
   void Draw(float x, float y, float a, float ex, float priority,int divuv = 0, int blendType = 0, Color c = {1.0f,1.0f,1.0f,1.0f});
-  void Render();
+  void Render(int BlendType);
   void Clear() {
-    _reserve_list[0].clear();
-    _reserve_list[1].clear();
+    for (auto &i : _reserve_list) {
+      i.clear();
+    }
   }
 
  protected:
@@ -38,11 +39,11 @@ class Graphic {
   int _height;
   std::wstring _path;
   const UINT maxInstance = 65535;
-  std::vector<InputPerInstance> _reserve_list[2];
+  std::vector<InputPerInstance> _reserve_list[3];
   ComPtr<ID3D12Resource> _vertBuff = nullptr;
-  ComPtr<ID3D12Resource> _constBuff[2] = {nullptr};
+  ComPtr<ID3D12Resource> _constBuff = nullptr;
   ComPtr<ID3D12Resource> _texBuff = nullptr;
-  ComPtr<ID3D12PipelineState> _gpipelineState[2] = {nullptr};
+  ComPtr<ID3D12PipelineState> _gpipelineState[3] = {nullptr};
   UINT srvIndex = 0;
 
   void initShaderResourceView();

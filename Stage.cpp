@@ -1,6 +1,6 @@
 #include "Stage.h"
 
-#include "BulletReflect.h"
+#include "BulletAccelReflect.h"
 #include "Constant.h"
 #include "MoverManager.h"
 #include "Player.h"
@@ -13,29 +13,34 @@ void Stage::Initialize() {
 }
 
 void Stage::Update() {
-  if (_cnt % 90 == 0) {
-    int x = rand() % 180;
-    int y = rand() % 180;
-    int col = rand() % 8;
-    float a = Constant::kPI / 64 * (rand() % 64);
+  if (_cnt % 120 == 0) {
+    bullet::Descriptor::ACCEL_REFLECT_DESC desc = {};
+    desc.x = -120 + util::Random::getIns().getRand(240) +
+             Constant::kGameWidth / 2 + Constant::kGameTopX;
+    desc.y = -120 + util::Random::getIns().getRand(240) +
+             Constant ::kGameHeight / 4 + Constant::kGameTopY;
+    desc.color = static_cast<bullet::Color>(util::Random::getIns().getRand(8));
+    desc.type = bullet::Type::kRice;
+    desc.speed = 3.0f;
+    desc.speed_accel = -1.8f / 120.0f;
+    desc.angle = Constant::kPI / 256 * (util::Random::getIns().getRand(256));
+    desc.angle_accel = Constant::kPI2 / 4.0f / 120.0f;
+    desc.accel_time = 120;
+    desc.blendtype = bullet::BlendType::kAdd;
     for (int i = 0; i < 32; i++) {
-      mover::Manager::getIns().addMover(
-          std::make_shared<bullet::BulletReflect>(
-              "B_small", 24 + col,
-              (static_cast<float>(Constant::kGameBottomX -
-                                  Constant::kGameTopX) /
-                   2 -
-               90 + x),
-              static_cast<float>(Constant::kScreenHeight / 4 - 90 + y),
-              a + Constant::kPI2 / 32 * i, 2.0f),
-          true);
+      desc.angle += Constant::kPI2 / 32.0f;
+      mover::Manager::getIns().addMover(bullet::Create(desc), true);
+      desc.angle_accel *= -1.0f;
+      mover::Manager::getIns().addMover(bullet::Create(desc), true);
+      desc.angle_accel *= -1.0f;
     }
   }
   mover::Manager::getIns().Update();
   _cnt++;
 }
 
-void Stage::Render() const { mover::Manager::getIns().Render();
+void Stage::Render() const {
+  mover::Manager::getIns().Render();
   _frame->Draw(Constant::kScreenWidth / 2.0f, Constant::kScreenHeight / 2.0f,
                0.0f, 1.0f, 0.0f);
 }

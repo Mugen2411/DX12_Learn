@@ -13,6 +13,7 @@ class Player : public mover::Mover {
         _y(Constant::kGameBottomY / 4 * 3),
         _sp(4.0f) {
     _graph = mugen_engine::getIns().LoadGraphic("minoki");
+    _marker = mugen_engine::getIns().LoadGraphic("marker");
     _input = CControllerFactory::GetIns().GetController();
   }
   State Update();
@@ -26,5 +27,6 @@ class Player : public mover::Mover {
   float _sp;
   std::weak_ptr<CSTGInputManager> _input;
   std::shared_ptr<mugen_engine::Graphic> _graph;
+  std::shared_ptr<mugen_engine::Graphic> _marker;
 };
 }  // namespace mover

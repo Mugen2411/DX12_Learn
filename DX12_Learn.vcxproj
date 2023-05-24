@@ -144,7 +144,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BulletAccelReflect.cpp" />
     <ClCompile Include="BulletBase.cpp" />
+    <ClCompile Include="BulletAccel.cpp" />
     <ClCompile Include="BulletReflect.cpp" />
     <ClCompile Include="CControllerFactory.cpp" />
     <ClCompile Include="CEffect.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="BulletAccelReflect.h" />
     <ClInclude Include="BulletBase.h" />
+    <ClInclude Include="BulletAccel.h" />
     <ClInclude Include="BulletReflect.h" />
     <ClInclude Include="CControllerFactory.h" />
     <ClInclude Include="CEffect.h" />
@@ -207,6 +212,7 @@
     <ClInclude Include="Fps.h" />
     <ClInclude Include="Mover.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Stage.h" />

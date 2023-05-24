@@ -1,5 +1,6 @@
 #pragma once
 #include "DxGraphic.h"
+#include "Random.h"
 
 class Stage{
  public:

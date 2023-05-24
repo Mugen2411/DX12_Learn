@@ -40,7 +40,13 @@ void Engine::Initialize(int width, int height, HWND hWnd) {
 
 void Engine::ScreenFlip() {
   for (auto& i : _loaded_graphics) {
-    i.second->Render();
+    i.second->Render(0);
+  }
+  for (auto& i : _loaded_graphics) {
+    i.second->Render(2);
+  }
+  for (auto& i : _loaded_graphics) {
+    i.second->Render(1);
   }
   D3D12_RESOURCE_BARRIER barrierDesc = {};
   barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -255,7 +261,7 @@ ComPtr<ID3D12PipelineState> Engine::CreateGraphicPipelineState(
   gpipeline.DepthStencilState.DepthEnable = true;
   gpipeline.DepthStencilState.StencilEnable = false;
   gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-  gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+  gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
   gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 

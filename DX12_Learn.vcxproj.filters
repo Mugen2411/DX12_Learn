@@ -43,6 +43,12 @@
     <Filter Include="ヘッダー ファイル\Effect">
       <UniqueIdentifier>{1f4495f1-e918-4b22-8611-28458198d82f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Util">
+      <UniqueIdentifier>{4e678e0f-f7f1-4238-aac0-f3f687fa9fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Util">
+      <UniqueIdentifier>{97faa1fc-f304-4179-a405-2f99d53d3ade}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +102,15 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\Mover</Filter>
     </ClCompile>
+    <ClCompile Include="BulletAccel.cpp">
+      <Filter>ソース ファイル\Mover\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletAccelReflect.cpp">
+      <Filter>ソース ファイル\Mover\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicVertexShader.hlsl">
@@ -136,9 +151,6 @@
     <ClInclude Include="Constant.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Fps.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="MoverManager.h">
       <Filter>ヘッダー ファイル\Mover</Filter>
     </ClInclude>
@@ -154,13 +166,7 @@
     <ClInclude Include="CSTGInputManager.h">
       <Filter>ヘッダー ファイル\input</Filter>
     </ClInclude>
-    <ClInclude Include="CVector.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CControllerFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CEffect.h">
@@ -174,6 +180,24 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル\Mover</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletAccel.h">
+      <Filter>ヘッダー ファイル\Mover\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletAccelReflect.h">
+      <Filter>ヘッダー ファイル\Mover\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CVector.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Fps.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

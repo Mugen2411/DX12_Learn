@@ -27,7 +27,7 @@ App::App(int width, int height, LPCWSTR windowTitle)
 
   _hwnd = CreateWindow(windowClass.lpszClassName, _windowTitle,
                        WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX,
-                       CW_USEDEFAULT, CW_USEDEFAULT,
+                       CW_USEDEFAULT, 100,
                        wrc.right - wrc.left, wrc.bottom - wrc.top, nullptr,
                        nullptr, windowClass.hInstance, nullptr);
 
@@ -46,7 +46,9 @@ void App::Initialize() {
   mugen_engine::getIns().LoadGraphic(
       "sys_frame", _T("media/graphic/system/frame.png"), 1280, 960, 1, 1, 1);
   mugen_engine::getIns().LoadGraphic(
-      "minoki", _T("media/graphic/player/minoki.png"), 32, 32, 1, 1, 1);
+      "minoki", _T("media/graphic/player/minoki.png"), 64, 64, 1, 1, 1);
+  mugen_engine::getIns().LoadGraphic(
+      "marker", _T("media/graphic/player/marker.png"), 16, 16, 1, 1, 1);
   mugen_engine::getIns().LoadGraphic(
       "B_small", _T("media/graphic/bullet/small.png"), 32, 32, 40, 8, 5);
   mugen_engine::getIns().LoadGraphic(
