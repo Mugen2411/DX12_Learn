@@ -13,7 +13,7 @@ class BulletReflect : virtual public BulletBase {
  protected:
   bool _is_reflected;
   virtual State Update();
-  void Reflect();
+  int Reflect();
 };
 
 std::shared_ptr<BulletBase> Create(Descriptor::REFLECT_DESC desc);

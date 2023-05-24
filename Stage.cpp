@@ -20,7 +20,7 @@ void Stage::Update() {
     desc.y = -120 + util::Random::getIns().getRand(240) +
              Constant ::kGameHeight / 4 + Constant::kGameTopY;
     desc.color = static_cast<bullet::Color>(util::Random::getIns().getRand(8));
-    desc.type = bullet::Type::kRice;
+    desc.type = bullet::Type::kSmall;
     desc.speed = 3.0f;
     desc.speed_accel = -1.8f / 120.0f;
     desc.angle = Constant::kPI / 256 * (util::Random::getIns().getRand(256));
