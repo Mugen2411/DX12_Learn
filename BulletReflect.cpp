@@ -36,7 +36,6 @@ int BulletReflect::Reflect() {
       _is_reflected = true;
       ret = 2;
     }
-    return ret;
   }
   return ret;
 }

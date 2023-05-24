@@ -131,6 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +156,7 @@
     <ClCompile Include="CKeyInputManager.cpp" />
     <ClCompile Include="CSTGInputManager.cpp" />
     <ClCompile Include="CVector.cpp" />
+    <ClCompile Include="Mover.cpp" />
     <ClCompile Include="MoverManager.cpp" />
     <ClCompile Include="Composit.cpp" />
     <ClCompile Include="DxGraphic.cpp" />

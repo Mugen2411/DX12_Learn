@@ -5,13 +5,9 @@
 namespace bullet {
 BulletBase::BulletBase(Type type, Color color, float x, float y, float a,
                        float sp, BlendType blendtype)
-    : Mover(),
+    : Mover(x, y, a, sp, bullet_type_data[static_cast<int>(type)].radius),
       _graph(mugen_engine::getIns().LoadGraphic(
           bullet_type_data[static_cast<int>(type)].gid)),
-      _x(x),
-      _y(y),
-      _a(a),
-      _sp(sp),
       _gnum(bullet_type_data[static_cast<int>(type)].offset +
             static_cast<int>(color)),
       _blend_type(blendtype),
@@ -24,12 +20,9 @@ void BulletBase::Process() {
   _cnt++;
 }
 void BulletBase::OutJudge() {
-  if (_x < -abs(bullet_type_data[static_cast<int>(_type)].radius) * 2 ||
-      _x > Constant::kScreenWidth +
-               abs(bullet_type_data[static_cast<int>(_type)].radius) * 2 ||
-      _y < -abs(bullet_type_data[static_cast<int>(_type)].radius) * 2 ||
-      _y > Constant::kScreenHeight +
-               abs(bullet_type_data[static_cast<int>(_type)].radius) * 2)
+  if (_x < -abs(_radius) * 2 ||
+      _x > Constant::kScreenWidth + abs(_radius) * 2 ||
+      _y < -abs(_radius) * 2 || _y > Constant::kScreenHeight + abs(_radius) * 2)
     _state = State::kDisappear;
 }
 BulletBase::State BulletBase::Update() {

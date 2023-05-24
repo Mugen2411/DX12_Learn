@@ -1,6 +1,7 @@
 #include "MoverManager.h"
 
 #include "Mover.h"
+#include "Player.h"
 
 namespace mover {
 
@@ -10,9 +11,15 @@ void Manager::Update() {
     _unused_index.push(_dead_index.front());
     _dead_index.pop();
   }
+  _player->Update();
   for (_currentIndex = 0; _currentIndex < kMaxIndex; _currentIndex++) {
     if (!_mover_list[_currentIndex].alive) continue;
     _mover_list[_currentIndex].contents->Update();
+  }
+  for (int i = 0; i < kMaxIndex; i++) {
+    if (!_mover_list[i].alive) continue;
+    _mover_list[i].contents->Dispatch(_player.get());
+    _player->Dispatch(_mover_list[i].contents.get());
   }
   for (_currentIndex = 0; _currentIndex < kMaxIndex; _currentIndex++) {
     if (!_mover_list[_currentIndex].alive) continue;
@@ -37,9 +44,11 @@ void Manager::Render() const {
     if (!_mover_list[i].alive) continue;
     _mover_list[i].contents->Render();
   }
+  _player->Render();
 }
 
-Manager::Manager() : kMaxIndex(65536), _mover_list(kMaxIndex), _currentIndex(-1) {
+Manager::Manager()
+    : kMaxIndex(65536), _mover_list(kMaxIndex), _currentIndex(-1) {
   for (int i = 0; i < kMaxIndex; i++) {
     _unused_index.push(i);
   }

@@ -1,9 +1,11 @@
 #include "Player.h"
 namespace mover {
 Mover::State Player::Update() {
-  CVector v = _input.lock()->GetVector() * _sp;
+  CVector v = _input.lock()->GetVector() * _spd;
   _x += v.x_;
   _y += v.y_;
+  _sp = v.GetLength();
+  _a = v.GetAngle();
   return _state;
 }
 

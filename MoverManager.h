@@ -3,8 +3,12 @@
 #include <queue>
 #include <vector>
 
+namespace bullet {
+class BulletBase;
+}
 namespace mover {
 class Mover;
+class Player;
 struct MOVER_ELEM {
   bool alive = false;
   int parent = -1;
@@ -22,6 +26,9 @@ class Manager {
     _mover_list[idx].contents.swap(m);
     if (isDependOnParent) _mover_list[idx].parent = _currentIndex;
   }
+  void addMover(std::shared_ptr<Player> p, bool isDependOnParent) {
+    _player.swap(p);
+  }
   void Update();
   void Render() const;
 
@@ -29,6 +36,7 @@ class Manager {
   static Manager _instance;
   Manager();
   std::vector<MOVER_ELEM> _mover_list;
+  std::shared_ptr<Player> _player;
   std::queue<int> _unused_index;
   std::queue<int> _dead_index;
   int _currentIndex;

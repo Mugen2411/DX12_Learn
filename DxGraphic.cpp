@@ -29,11 +29,13 @@ void Graphic::Load() {
       D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
       IID_PPV_ARGS(_vertBuff.GetAddressOf()));
 
-  resdesc.Width = sizeof(_reserve_list[0]) * maxInstance;
-  getIns().getDevice()->CreateCommittedResource(
-      &heapprop, D3D12_HEAP_FLAG_NONE, &resdesc,
-      D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-      IID_PPV_ARGS(_constBuff.GetAddressOf()));
+  resdesc.Width = sizeof(_reserve_list[0][0]) * maxInstance;
+  for (int i = 0; i < 3; i++) {
+    getIns().getDevice()->CreateCommittedResource(
+        &heapprop, D3D12_HEAP_FLAG_NONE, &resdesc,
+        D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+        IID_PPV_ARGS(_constBuff[i].GetAddressOf()));
+  }
 
   DirectX::TexMetadata mt = {};
   DirectX::ScratchImage scImg = {};
@@ -92,10 +94,10 @@ void Graphic::Load() {
   initShaderResourceView();
 }
 
-// 0:アルファ 1:加算
-void Graphic::Draw(float x, float y, float a, float ex, float priority, int divuv,
-                   int blendType, Color c) {
-  if (blendType >= _countof(_gpipelineState)) return;
+// 0:ブレンド無し 1:加算 2:アルファ
+void Graphic::Draw(float x, float y, float a, float ex, float priority,
+                   int divuv, int blendType, Color c) {
+  if (blendType >= 3) return;
   if (_reserve_list[blendType].size() >= maxInstance) return;
   DirectX::XMMATRIX scl = DirectX::XMMatrixScaling(
       2.0f / getIns()._width * ex, -2.0f / getIns()._height * ex, 1.0f);
@@ -128,28 +130,27 @@ void Graphic::Render(int blendType) {
   _vertBuff->Unmap(0, nullptr);
 
   InputPerInstance* constMap = nullptr;
-  _constBuff->Map(0, nullptr, (void**)&constMap);
-  std::copy(std::begin(_reserve_list[blendType]), std::end(_reserve_list[blendType]),
-            constMap);
-  _constBuff->Unmap(0, nullptr);
+  _constBuff[blendType]->Map(0, nullptr, (void**)&constMap);
+  std::copy(std::begin(_reserve_list[blendType]),
+            std::end(_reserve_list[blendType]), constMap);
+  _constBuff[blendType]->Unmap(0, nullptr);
 
   D3D12_VERTEX_BUFFER_VIEW vbView[2] = {};
   vbView[0].BufferLocation = _vertBuff->GetGPUVirtualAddress();
   vbView[0].SizeInBytes = (sizeof(base[0]) * _countof(base));
   vbView[0].StrideInBytes = sizeof(base[0]);
-  vbView[1].BufferLocation = _constBuff->GetGPUVirtualAddress();
+  vbView[1].BufferLocation = _constBuff[blendType]->GetGPUVirtualAddress();
   vbView[1].SizeInBytes =
       sizeof(_reserve_list[blendType][0]) * _reserve_list[blendType].size();
   vbView[1].StrideInBytes = sizeof(_reserve_list[blendType][0]);
 
-  if (!_reserve_list[blendType].empty()) {
-    getIns().SetRootDescriptorTable(srvIndex);
-    getIns().getCommandList()->IASetPrimitiveTopology(
-        D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-    getIns().getCommandList()->SetPipelineState(_gpipelineState[blendType].Get());
-    getIns().getCommandList()->IASetVertexBuffers(0, 2, vbView);
-    getIns().getCommandList()->DrawInstanced(4, _reserve_list[blendType].size(), 0, 0);
-  }
+  getIns().SetRootDescriptorTable(srvIndex);
+  getIns().getCommandList()->IASetPrimitiveTopology(
+      D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+  getIns().getCommandList()->SetPipelineState(_gpipelineState[blendType].Get());
+  getIns().getCommandList()->IASetVertexBuffers(0, 2, vbView);
+  getIns().getCommandList()->DrawInstanced(4, _reserve_list[blendType].size(),
+                                           0, 0);
 }
 void Graphic::initShaderResourceView() {
   D3D12_SHADER_RESOURCE_VIEW_DESC srvD = {};

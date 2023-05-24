@@ -60,18 +60,16 @@ void Engine::ScreenFlip() {
   ID3D12CommandList* _cmdLists[] = {_cmdList.Get()};
   _cmdQueue->ExecuteCommandLists(1, _cmdLists);
   _cmdQueue->Signal(_fence.Get(), ++_fenceval);
-  if (_fence->GetCompletedValue() != _fenceval) {
-    auto event = CreateEvent(nullptr, false, false, nullptr);
-    _fence->SetEventOnCompletion(_fenceval, event);
-    WaitForSingleObject(event, INFINITE);
-    CloseHandle(event);
-  }
-  _cmdAllocator->Reset();
-  _cmdList->Reset(_cmdAllocator.Get(), nullptr);
+   auto event = CreateEvent(nullptr, false, false, nullptr);
+   _fence->SetEventOnCompletion(_fenceval, event);
+   WaitForSingleObject(event, INFINITE);
+   CloseHandle(event);
+  _swapchain->Present(0, 0);
   for (auto& i : _loaded_graphics) {
     i.second->Clear();
   }
-  _swapchain->Present(1, 0);
+  _cmdAllocator->Reset();
+  _cmdList->Reset(_cmdAllocator.Get(), nullptr);
 }
 
 void Engine::Process() {

@@ -8,10 +8,10 @@ namespace mover {
 class Player : public mover::Mover {
  public:
   Player()
-      : _x((Constant::kGameBottomX - Constant::kGameTopX) / 2 +
-           Constant::kGameTopX),
-        _y(Constant::kGameBottomY / 4 * 3),
-        _sp(4.0f) {
+      : _spd(4.0f),
+        Mover((Constant::kGameBottomX - Constant::kGameTopX) / 2 +
+                  Constant::kGameTopX,
+              Constant::kGameBottomY / 4 * 3, 0.0f, 0.0f, 6) {
     _graph = mugen_engine::getIns().LoadGraphic("minoki");
     _marker = mugen_engine::getIns().LoadGraphic("marker");
     _input = CControllerFactory::GetIns().GetController();
@@ -22,9 +22,10 @@ class Player : public mover::Mover {
   void Dead() {}
   void Disappear() {}
 
+  void Dispatch(Mover* m) { m->Hit(this); }
+
  private:
-  float _x, _y;
-  float _sp;
+  float _spd;
   std::weak_ptr<CSTGInputManager> _input;
   std::shared_ptr<mugen_engine::Graphic> _graph;
   std::shared_ptr<mugen_engine::Graphic> _marker;

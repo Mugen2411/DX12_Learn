@@ -16,6 +16,7 @@ class Graphic {
   void Clear() {
     for (auto &i : _reserve_list) {
       i.clear();
+      i.reserve(maxInstance);
     }
   }
 
@@ -38,10 +39,10 @@ class Graphic {
   int _width;
   int _height;
   std::wstring _path;
-  const UINT maxInstance = 65535;
+  const UINT maxInstance = 32768;
   std::vector<InputPerInstance> _reserve_list[3];
   ComPtr<ID3D12Resource> _vertBuff = nullptr;
-  ComPtr<ID3D12Resource> _constBuff = nullptr;
+  ComPtr<ID3D12Resource> _constBuff[3] = {nullptr};
   ComPtr<ID3D12Resource> _texBuff = nullptr;
   ComPtr<ID3D12PipelineState> _gpipelineState[3] = {nullptr};
   UINT srvIndex = 0;
@@ -53,9 +54,9 @@ const Graphic::Color MainColor[8] = {
     Graphic::Color{1.0f, 0.5f, 0.0f, 1.0f},
     Graphic::Color{1.0f, 1.0f, 0.0f, 1.0f},
     Graphic::Color{0.0f, 1.0f, 0.0f, 1.0f},
-    Graphic::Color{0.0f, 1.0f, 1.0f, 1.0f},
-    Graphic::Color{1.0f, 0.0f, 1.0f, 1.0f},
-    Graphic::Color{0.7f, 0.0f, 5.0f, 1.0f},
+    Graphic::Color{0.0f, 1.0f, 8.0f, 1.0f},
+    Graphic::Color{0.0f, 0.3f, 1.0f, 1.0f},
+    Graphic::Color{0.7f, 0.0f, 6.0f, 1.0f},
     Graphic::Color{0.5f, 0.5f, 0.5f, 1.0f}
 };
 Graphic::Color GetColorByCode(int code);
