@@ -11,7 +11,7 @@ class Player : public mover::Mover {
       : _spd(4.0f),
         Mover((Constant::kGameBottomX - Constant::kGameTopX) / 2 +
                   Constant::kGameTopX,
-              Constant::kGameBottomY / 4 * 3, 0.0f, 0.0f, 6) {
+              Constant::kGameBottomY / 4 * 3, 0.0f, 0.0f, 5) {
     _graph = mugen_engine::getIns().LoadGraphic("minoki");
     _marker = mugen_engine::getIns().LoadGraphic("marker");
     _input = CControllerFactory::GetIns().GetController();

@@ -44,8 +44,7 @@ struct BASE_DESC {
 }  // namespace Descriptor
 class BulletBase : public mover::Mover {
  public:
-  BulletBase(Type type, Color color, float x, float y, float a, float sp,
-             BlendType blendtype);
+  BulletBase(Descriptor::BASE_DESC &desc);
 
   void Dispatch(Mover* m) {
     m->Hit(this);

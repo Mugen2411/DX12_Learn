@@ -7,8 +7,7 @@ struct REFLECT_DESC : virtual public BASE_DESC {};
 }  // namespace Descriptor
 class BulletReflect : virtual public BulletBase {
  public:
-  BulletReflect(Type type, Color color, float x, float y, float a, float sp,
-                BlendType blendtype);
+  BulletReflect(Descriptor::REFLECT_DESC &desc);
 
  protected:
   bool _is_reflected;

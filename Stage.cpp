@@ -15,12 +15,12 @@ void Stage::Initialize() {
 void Stage::Update() {
   if (_cnt % 120 == 0) {
     bullet::Descriptor::ACCEL_REFLECT_DESC desc = {};
-    desc.x = -240 + util::Random::getIns().getRand(480) +
+    desc.x = -180 + util::Random::getIns().getRand(360) +
              Constant::kGameWidth / 2 + Constant::kGameTopX;
-    desc.y = -240 + util::Random::getIns().getRand(480) +
+    desc.y = -180 + util::Random::getIns().getRand(360) +
              Constant ::kGameHeight / 4 + Constant::kGameTopY;
     desc.color = static_cast<bullet::Color>(util::Random::getIns().getRand(8));
-    desc.type = bullet::Type::kSmall;
+    desc.type = bullet::Type::kArrow;
     desc.speed = 3.0f;
     desc.speed_accel = -1.8f / 120.0f;
     desc.angle = Constant::kPI / 256 * (util::Random::getIns().getRand(256));

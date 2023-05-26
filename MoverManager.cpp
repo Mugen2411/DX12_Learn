@@ -48,7 +48,7 @@ void Manager::Render() const {
 }
 
 Manager::Manager()
-    : kMaxIndex(65536), _mover_list(kMaxIndex), _currentIndex(-1) {
+    : kMaxIndex(16384), _mover_list(kMaxIndex), _currentIndex(-1) {
   for (int i = 0; i < kMaxIndex; i++) {
     _unused_index.push(i);
   }

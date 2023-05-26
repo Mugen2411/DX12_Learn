@@ -11,8 +11,7 @@ struct ACCEL_DESC : virtual public BASE_DESC {
 }  // namespace Descriptor
 class BulletAccel : virtual public BulletBase {
  public:
-  BulletAccel(Type type, Color color, float x, float y, float a, float aa, int accel_time, float sp, float spa,
-                BlendType blendtype);
+  BulletAccel(Descriptor::ACCEL_DESC &desc);
 
  protected:
   float _angle_accel, _speed_accel;

@@ -3,16 +3,16 @@
 #include "Constant.h"
 
 namespace bullet {
-BulletBase::BulletBase(Type type, Color color, float x, float y, float a,
-                       float sp, BlendType blendtype)
-    : Mover(x, y, a, sp, bullet_type_data[static_cast<int>(type)].radius),
+BulletBase::BulletBase(Descriptor::BASE_DESC &desc)
+    : Mover(desc.x, desc.y, desc.angle, desc.speed,
+            bullet_type_data[static_cast<int>(desc.type)].radius),
       _graph(mugen_engine::getIns().LoadGraphic(
-          bullet_type_data[static_cast<int>(type)].gid)),
-      _gnum(bullet_type_data[static_cast<int>(type)].offset +
-            static_cast<int>(color)),
-      _blend_type(blendtype),
-      _type(type),
-      _color(color),
+          bullet_type_data[static_cast<int>(desc.type)].gid)),
+      _gnum(bullet_type_data[static_cast<int>(desc.type)].offset +
+            static_cast<int>(desc.color)),
+      _blend_type(desc.blendtype),
+      _type(desc.type),
+      _color(desc.color),
       _cnt(0) {}
 void BulletBase::Process() {
   _x += cos(_a) * _sp;
@@ -35,7 +35,6 @@ void BulletBase::Render() const {
                static_cast<int>(_blend_type));
 }
 std::shared_ptr<BulletBase> Create(Descriptor::BASE_DESC desc) {
-  return std::make_shared<BulletBase>(desc.type, desc.color, desc.x, desc.y,
-                                      desc.angle, desc.speed, desc.blendtype);
+  return std::make_shared<BulletBase>(desc);
 }
 }  // namespace bullet
