@@ -18,16 +18,10 @@ class Manager {
  public:
   static Manager& getIns() { return _instance; }
   const int kMaxIndex;
-  void addMover(std::shared_ptr<Mover> m, bool isDependOnParent) {
-    if (_unused_index.empty()) return;
-    int idx = _unused_index.front();
-    _unused_index.pop();
-    _mover_list[idx].alive = true;
-    _mover_list[idx].contents.swap(m);
-    if (isDependOnParent) _mover_list[idx].parent = _currentIndex;
-  }
-  void addMover(std::shared_ptr<Player> p, bool isDependOnParent) {
-    _player.swap(p);
+  void RegisterBullet(std::shared_ptr<Mover> m,
+                      bool isDependOnParent);
+  void RegisterBullet(std::shared_ptr<Player> p, bool isDependOnParent) {
+    player_.swap(p);
   }
   void Update();
   void Render() const;
@@ -35,10 +29,13 @@ class Manager {
  private:
   static Manager _instance;
   Manager();
-  std::vector<MOVER_ELEM> _mover_list;
-  std::shared_ptr<Player> _player;
-  std::queue<int> _unused_index;
-  std::queue<int> _dead_index;
-  int _currentIndex;
+  std::vector<MOVER_ELEM> bullet_list_;
+  std::vector<MOVER_ELEM> enemy_list_;
+  std::shared_ptr<Player> player_;
+  std::queue<int> unused_bullet_index_;
+  std::queue<int> unused_enemy_index;
+  std::queue<int> dead_bullet_index_;
+  std::queue<int> dead_enemy_index_;
+  int currentEnemyIndex_;
 };
 }  // namespace mover

@@ -4,6 +4,7 @@
 
 #include "CEffectParent.h"
 #include "CEffect_BulletDelete.h"
+#include "CEffect_BulletBorn.h"
 #include "DxGraphic.h"
 #include "Engine.h"
 #include "Mover.h"

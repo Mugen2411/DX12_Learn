@@ -52,6 +52,8 @@ void App::Initialize() {
   mugen_engine::getIns().LoadGraphic(
       "B_small", _T("media/graphic/bullet/small.png"), 32, 32, 40, 8, 5);
   mugen_engine::getIns().LoadGraphic(
+      "E_shimaenaga", _T("media/graphic/enemy/shimaenaga.png"), 64, 64, 4, 4, 1);
+  mugen_engine::getIns().LoadGraphic(
       "eff_bulletdelete", _T("media/graphic/system/bullet_delete.png"), 32, 32, 8, 8, 1);
   _stage.Initialize();
 }

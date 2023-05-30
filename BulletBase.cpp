@@ -13,7 +13,12 @@ BulletBase::BulletBase(Descriptor::BASE_DESC &desc)
       _blend_type(desc.blendtype),
       _type(desc.type),
       _color(desc.color),
-      _cnt(0) {}
+      _cnt(0) {
+  CEffectParent::RegisterEffect(std::make_shared<CEffect_BulletBorn>(
+      CVector(_x, _y), CVector(_a) * _sp,
+      bullet_type_data[static_cast<int>(_type)].radius * 12,
+      static_cast<int>(_color)));
+}
 void BulletBase::Process() {
   _x += cos(_a) * _sp;
   _y += sin(_a) * _sp;
