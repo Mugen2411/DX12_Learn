@@ -209,7 +209,6 @@
     <ClInclude Include="CSTGInputManager.h" />
     <ClInclude Include="CVector.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemyMoverInterface.h" />
     <ClInclude Include="MoverManager.h" />
     <ClInclude Include="Composit.h" />
     <ClInclude Include="Constant.h" />

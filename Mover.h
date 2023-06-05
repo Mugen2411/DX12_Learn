@@ -32,5 +32,6 @@ class Mover {
   int _radius;
 
   friend Manager;
+  friend List;
 };
 }  // namespace mover

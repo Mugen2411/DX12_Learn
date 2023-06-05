@@ -17,7 +17,7 @@ void Stage::Update() {
   static float base_angle = 0.0f;
   static float angle_accel = Constant::kPI2 / 4.0f / 60.0f;
   static int color = 0;
-  if (_cnt % 10 == 0) {
+  if (_cnt % 20 == 0) {
     bullet::Descriptor::ACCEL_REFLECT_DESC desc = {};
     desc.x = Constant::kGameWidth / 2 + Constant::kGameTopX;
     desc.y = Constant ::kGameHeight / 4 + Constant::kGameTopY;

@@ -217,8 +217,5 @@
     <ClInclude Include="EnemyBase.h">
       <Filter>ヘッダー ファイル\Mover\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyMoverInterface.h">
-      <Filter>ヘッダー ファイル\Mover\Enemy</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

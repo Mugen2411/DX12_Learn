@@ -14,6 +14,28 @@ struct MOVER_ELEM {
   int parent = -1;
   std::shared_ptr<Mover> contents;
 };
+
+class List {
+ public:
+  List(const int maxIndex) : list_(maxIndex), kMaxIndex(maxIndex) {
+    for (int i = 0; i < kMaxIndex; i++) {
+      unused_index_.push(i);
+    }
+  }
+  void Register(std::shared_ptr<Mover> m, int parent);
+  void Update();
+  void Render() const;
+  void Dispatch(List rhs);
+  void Dispatch(std::shared_ptr<Mover> m);
+  int GetCurrentIndex() { return currentIndex_; }
+ private:
+  const int kMaxIndex;
+  int currentIndex_ = -1;
+  std::vector<MOVER_ELEM> list_;
+  std::queue<int> unused_index_;
+  std::queue<int> dead_index_;
+};
+
 class Manager {
  public:
   static Manager& getIns() { return _instance; }
@@ -29,13 +51,8 @@ class Manager {
  private:
   static Manager _instance;
   Manager();
-  std::vector<MOVER_ELEM> bullet_list_;
-  std::vector<MOVER_ELEM> enemy_list_;
+  List bullet_list_;
+  List enemy_list_;
   std::shared_ptr<Player> player_;
-  std::queue<int> unused_bullet_index_;
-  std::queue<int> unused_enemy_index_;
-  std::queue<int> dead_bullet_index_;
-  std::queue<int> dead_enemy_index_;
-  int currentEnemyIndex_;
 };
 }  // namespace mover
