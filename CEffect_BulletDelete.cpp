@@ -3,7 +3,7 @@
 CEffect_BulletDelete::CEffect_BulletDelete(CVector position_, CVector velocity,
                                            double size, int color)
     : CEffect(position_),
-      velocity_(velocity * 0.5),
+      velocity_(velocity * 1.0),
       size_(size),
       color_(color),
       cnt_(0) {

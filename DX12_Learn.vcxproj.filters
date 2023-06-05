@@ -49,6 +49,12 @@
     <Filter Include="ソース ファイル\Util">
       <UniqueIdentifier>{97faa1fc-f304-4179-a405-2f99d53d3ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Mover\Enemy">
+      <UniqueIdentifier>{7ff487f8-38ef-4801-8fa9-bd34269a6a6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Mover\Enemy">
+      <UniqueIdentifier>{a0c4bea4-8de0-4810-97ff-e9d351561654}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +213,12 @@
     </ClInclude>
     <ClInclude Include="CEffect_BulletBorn.h">
       <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダー ファイル\Mover\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMoverInterface.h">
+      <Filter>ヘッダー ファイル\Mover\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

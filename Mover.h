@@ -12,6 +12,8 @@ class Mover {
   Mover(float x, float y, float a, float sp, int radius)
       : _state(State::kAlive), _x(x), _y(y), _a(a), _sp(sp), _radius(radius) {}
 
+  virtual ~Mover() {}
+
   virtual State Update() = 0;
   virtual void Render() const = 0;
   virtual void Dead() = 0;

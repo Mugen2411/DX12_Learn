@@ -29,7 +29,7 @@ struct BulletTypeData {
   int radius;
 };
 
-static std::vector<BulletTypeData> bullet_type_data{{"B_small", 0, 12},
+static std::vector<BulletTypeData> bullet_type_data{{"B_small", 0, 10},
                                                     {"B_small", 8, 8},
                                                     {"B_small", 16, 8},
                                                     {"B_small", 24, 10},

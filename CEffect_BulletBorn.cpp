@@ -20,11 +20,11 @@ void CEffect_BulletBorn::Render() const {
   auto c = mugen_engine::MainColor[color_];
   c.blendLevel = (1.0f - (cnt_ / 7.0f / duration_));
   _graph->Draw(position_.x_, position_.y_, velocity_.GetAngle(),
-               (size_ / 24.0) * (1.0f - cnt_ / 7.0f / duration_),
+               (size_ / 32.0) * (1.0f - cnt_ / 7.0f / duration_),
                Constant::Priority::kEffect, 2, 0, c);
   _graph->Draw(
       position_.x_, position_.y_, velocity_.GetAngle(),
-      (size_ / 32.0) * (1.0f - cnt_ / 7.0f / duration_),
+      (size_ / 36.0) * (1.0f - cnt_ / 7.0f / duration_),
       Constant::Priority::kEffect, 2, 1,
       mugen_engine::Graphic::Color{1.0f, 1.0f, 1.0f,
                                    (1.0f - (cnt_ / 7.0f / duration_)) * 0.7f});

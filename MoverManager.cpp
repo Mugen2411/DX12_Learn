@@ -18,6 +18,15 @@ void Manager::RegisterBullet(std::shared_ptr<Mover> m,
   if (isDependOnParent) bullet_list_[idx].parent = currentEnemyIndex_;
 }
 
+void Manager::RegisterEnemy(std::shared_ptr<Mover> m, bool isDependOnParent) {
+  if (unused_enemy_index_.empty()) return;
+  int idx = unused_enemy_index_.front();
+  unused_enemy_index_.pop();
+  enemy_list_[idx].alive = true;
+  enemy_list_[idx].contents.swap(m);
+  if (isDependOnParent) enemy_list_[idx].parent = currentEnemyIndex_;
+}
+
 void Manager::Update() {
   while (!dead_bullet_index_.empty()) {
     unused_bullet_index_.push(dead_bullet_index_.front());

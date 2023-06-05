@@ -37,7 +37,7 @@ class Fps {
   void Wait() {
     auto tookTime =
         std::chrono::system_clock::now() - start_time_;    // ‚©‚©‚Á‚½ŽžŠÔ
-    int waitTime = count_ * 1000 / ideal_fps_ -
+    int64_t waitTime = count_ * 1000 / ideal_fps_ -
                    std::chrono::duration_cast<std::chrono::milliseconds>
                        (tookTime).count();  // ‘Ò‚Â‚×‚«ŽžŠÔ
     if (waitTime > 0) {

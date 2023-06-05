@@ -18,9 +18,9 @@ class Manager {
  public:
   static Manager& getIns() { return _instance; }
   const int kMaxIndex;
-  void RegisterBullet(std::shared_ptr<Mover> m,
-                      bool isDependOnParent);
-  void RegisterBullet(std::shared_ptr<Player> p, bool isDependOnParent) {
+  void RegisterBullet(std::shared_ptr<Mover> m, bool isDependOnParent);
+  void RegisterEnemy(std::shared_ptr<Mover> m, bool isDependOnParent);
+  void RegisterPlayer(std::shared_ptr<Player> p, bool isDependOnParent) {
     player_.swap(p);
   }
   void Update();
@@ -33,7 +33,7 @@ class Manager {
   std::vector<MOVER_ELEM> enemy_list_;
   std::shared_ptr<Player> player_;
   std::queue<int> unused_bullet_index_;
-  std::queue<int> unused_enemy_index;
+  std::queue<int> unused_enemy_index_;
   std::queue<int> dead_bullet_index_;
   std::queue<int> dead_enemy_index_;
   int currentEnemyIndex_;
